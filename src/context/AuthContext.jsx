@@ -2,7 +2,6 @@
 import { useEffect, useState, useContext } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase";
-import * as authService from "../services/authService";
 import { createContext } from "react";
 
 export const AuthContext = createContext(null);
@@ -16,16 +15,14 @@ export function AuthProvider({ children }) {
       setCurrentUser(user);
       setIsLoading(false);
     });
-
     return unsub;
   }, []);
 
   const value = {
     currentUser,
     isLoading,
-    ...authService,
   };
-
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
 export const useAuth = () => useContext(AuthContext);

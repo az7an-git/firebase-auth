@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "../components/ui/index";
+import { Button } from "../components/auth/index";
 
 export function SignupSuccess() {
   const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import { Outlet, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { logout } from "../services/authService";
 
 export default function AppLayout() {
-  const { currentUser, isLoading, logout } = useAuth();
+  const { currentUser, isLoading } = useAuth();
   const navigate = useNavigate();
-
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -12,16 +12,13 @@ export default function AppLayout() {
       </div>
     );
   }
-
   if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
-
   async function handleLogout() {
     await logout();
     navigate("/login");
   }
-
   return (
     <div className="min-h-screen flex-1 flex flex-col bg-gray-100">
       <header className="flex items-center justify-between w-full gap-4 bg-white shadow-md px-4 h-16 md:px-6">

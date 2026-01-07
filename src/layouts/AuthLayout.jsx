@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 
 export default function AuthLayout() {
   const { currentUser, isLoading } = useAuth();
-
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -11,11 +10,9 @@ export default function AuthLayout() {
       </div>
     );
   }
-
   if (currentUser) {
     return <Navigate to="/dashboard" replace />;
   }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100">
       <Outlet />
