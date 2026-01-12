@@ -8,7 +8,7 @@ import {
 } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase";
-import { getUserDoc } from "../utils/userServices";
+import { getUserDoc } from "../utils/user.utils";
 
 export const AuthContext = createContext(null);
 

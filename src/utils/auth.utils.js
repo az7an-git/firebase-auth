@@ -6,7 +6,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase";
-import { createUserDoc } from "./userServices";
+import { createUserDoc } from "./user.utils";
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });

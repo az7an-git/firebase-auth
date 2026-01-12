@@ -1,8 +1,8 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, signInWithGoogle } from "../utils/authServices";
-import { getUserDoc } from "../utils/userServices";
+import { login, signInWithGoogle } from "../utils/auth.utils";
+import { getUserDoc } from "../utils/user.utils";
 import { useAuth } from "../context/AuthContext";
 import { showToast } from "../utils/toast";
 import {

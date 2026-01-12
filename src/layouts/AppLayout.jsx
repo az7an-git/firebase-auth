@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { logout } from "../utils/authServices";
+import { logout } from "../utils/auth.utils";
 import { showToast } from "../utils/toast";
 import { Navbar, Modal } from "../components/common";
 

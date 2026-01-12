@@ -31,4 +31,3 @@ export const updateUserDoc = async (uid, data) => {
   const ref = doc(db, "users", uid);
   await setDoc(ref, data, { merge: true });
 };
-

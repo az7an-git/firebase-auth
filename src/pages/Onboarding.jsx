@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { updateUserDoc } from "../utils/userServices";
+import { updateUserDoc } from "../utils/user.utils";
 import { showToast } from "../utils/toast";
 import { AuthCard, Input, Button, Alert } from "../components/auth/index";
 

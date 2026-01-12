@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signup, signInWithGoogle } from "../utils/authServices";
-import { getUserDoc } from "../utils/userServices";
+import { signup, signInWithGoogle } from "../utils/auth.utils";
+import { getUserDoc } from "../utils/user.utils";
 import { useAuth } from "../context/AuthContext";
 import { showToast } from "../utils/toast";
 import {

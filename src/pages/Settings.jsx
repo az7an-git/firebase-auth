@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { updateUserDoc } from "../utils/userServices";
+import { updateUserDoc } from "../utils/user.utils";
 import { showToast } from "../utils/toast";
 import { Input, Button, Alert } from "../components/auth/index";
 
