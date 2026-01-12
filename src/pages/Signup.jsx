@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signup, logout, signInWithGoogle } from "../services/authService";
+import { signup, signInWithGoogle } from "../utils/authServices";
+import { getUserDoc } from "../utils/userServices";
+import { useAuth } from "../context/AuthContext";
+import { showToast } from "../utils/toast";
 import {
   Input,
   Button,
@@ -10,11 +13,12 @@ import {
 } from "../components/auth/index";
 
 export function Signup() {
+  const { refreshUserDoc } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleSignup(e) {
@@ -22,30 +26,53 @@ export function Signup() {
     if (password !== confirmPassword) {
       return setError("Passwords do not match");
     }
+
     try {
       setError("");
-      setisLoading(true);
-      await signup(email, password);
-      await logout();
-      navigate("/signup-success");
+      setIsLoading(true);
+      const credential = await signup(email, password);
+      // Wait for userDoc to be created and loaded
+      await refreshUserDoc(credential.user.uid);
+      const profile = await getUserDoc(credential.user.uid);
+
+      showToast.success("Account created successfully!");
+      // Redirect based on onboarding status
+      if (!profile || !profile.onboardingComplete) {
+        navigate("/onboarding", { replace: true });
+      } else {
+        navigate("/signup-success", { replace: true });
+      }
     } catch (err) {
-      setError("Failed to create account: " + err.message);
+      const errorMsg = err.message || "Failed to create account";
+      setError(errorMsg);
+      showToast.error(errorMsg);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   }
 
-  // google handler
   async function handleGoogleSignup() {
     try {
       setError("");
-      setisLoading(true);
-      await signInWithGoogle();
-      navigate("/dashboard");
+      setIsLoading(true);
+      const credential = await signInWithGoogle();
+      // Wait for userDoc to be created and loaded
+      await refreshUserDoc(credential.user.uid);
+      const profile = await getUserDoc(credential.user.uid);
+
+      showToast.success("Signed up with Google successfully!");
+      // Redirect based on onboarding status
+      if (!profile || !profile.onboardingComplete) {
+        navigate("/onboarding", { replace: true });
+      } else {
+        navigate("/signup-success", { replace: true });
+      }
     } catch (err) {
-      setError("Google sign-in failed: " + err.message);
+      const errorMsg = err.message || "Google sign-in failed";
+      setError(errorMsg);
+      showToast.error(errorMsg);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   }
 
@@ -71,7 +98,6 @@ export function Signup() {
           placeholder="Enter your email"
           required
         />
-
         <Input
           type="password"
           label="Password"
@@ -80,7 +106,6 @@ export function Signup() {
           placeholder="Enter your password"
           required
         />
-
         <Input
           type="password"
           label="Confirm Password"
@@ -89,7 +114,6 @@ export function Signup() {
           placeholder="Confirm your password"
           required
         />
-
         <Button
           type="submit"
           variant="primary"
@@ -120,5 +144,3 @@ export function Signup() {
     </AuthCard>
   );
 }
-
-export default Signup;

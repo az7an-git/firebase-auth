@@ -1,8 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase";
-import { getUserDoc } from "../services/userServices";
+import { getUserDoc } from "../utils/userServices";
 
 export const AuthContext = createContext(null);
 
@@ -11,21 +17,41 @@ export function AuthProvider({ children }) {
   const [userDoc, setUserDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const refreshUserDoc = useCallback(
+    async (uid) => {
+      const targetUid = uid ?? currentUser?.uid;
+      if (!targetUid) return null;
+      try {
+        const doc = await getUserDoc(targetUid);
+        setUserDoc(doc);
+        return doc;
+      } catch (error) {
+        console.error("Failed to refresh user profile:", error);
+        return null;
+      }
+    },
+    [currentUser]
+  );
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
+      setIsLoading(true);
       if (!user) {
         setCurrentUser(null);
         setUserDoc(null);
         setIsLoading(false);
         return;
       }
-
       setCurrentUser(user);
-
-      const doc = await getUserDoc(user.uid);
-      setUserDoc(doc);
-
-      setIsLoading(false);
+      try {
+        const doc = await getUserDoc(user.uid);
+        setUserDoc(doc);
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        setUserDoc(null);
+      } finally {
+        setIsLoading(false);
+      }
     });
 
     return unsub;
@@ -35,6 +61,7 @@ export function AuthProvider({ children }) {
     currentUser,
     userDoc,
     isLoading,
+    refreshUserDoc,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
