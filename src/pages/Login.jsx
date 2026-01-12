@@ -9,14 +9,14 @@ import {
   Button,
 } from "../components/auth/index";
 
-export function Login() {
+export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  async function handleSubmit(e) {
+  async function handleLogin(e) {
     e.preventDefault();
     try {
       setError("");
@@ -43,7 +43,7 @@ export function Login() {
     >
       <Alert type="error" message={error} />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleLogin} className="space-y-4">
         <Input
           type="email"
           label="Email"
@@ -74,4 +74,4 @@ export function Login() {
       </form>
     </AuthCard>
   );
-}
+};

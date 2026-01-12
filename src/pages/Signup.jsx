@@ -17,12 +17,11 @@ export function Signup() {
   const [isLoading, setisLoading] = useState(false);
   const navigate = useNavigate();
 
-  async function handleSubmit(e) {
+  async function handleSignup(e) {
     e.preventDefault();
     if (password !== confirmPassword) {
       return setError("Passwords do not match");
     }
-
     try {
       setError("");
       setisLoading(true);
@@ -63,7 +62,7 @@ export function Signup() {
     >
       <Alert type="error" message={error} />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSignup} className="space-y-4">
         <Input
           type="email"
           label="Email"
@@ -123,17 +122,3 @@ export function Signup() {
 }
 
 export default Signup;
-
-//         <p className="mt-4 text-center text-sm text-gray-600">
-//           Already have an account?{" "}
-//           <Link
-//             to="/login"
-//             className="text-indigo-600 hover:text-indigo-800 font-medium"
-//           >
-//             Sign in
-//           </Link>
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }

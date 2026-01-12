@@ -12,7 +12,9 @@ export function Dashboard() {
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <p className="font-semibold text-green-600">You are successfully logged in.</p>
+        <p className="font-semibold text-green-600">
+          You are successfully logged in.
+        </p>
       </div>
     </div>
   );
